@@ -1,8 +1,12 @@
-import discord
 import os
 
+import discord
+from dotenv import load_dotenv
+
+load_dotenv()
+
 intents = discord.Intents.default()
-intents.message_content = True  # This is required to allow bots to read message content
+intents.message_content = True
 client = discord.Client(intents=intents)
 
 
@@ -15,6 +19,7 @@ async def on_ready():
 async def on_message(message):
   if message.author == client.user:
     return
+
   if message.content.startswith('$based'):
     await message.channel.send('Based!')
 
