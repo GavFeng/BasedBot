@@ -11,6 +11,85 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 
+based_words = ["based", "Based", "BASED"]
+pog_words = ["pog", "poggers", "Pog", "Poggers", "POG", "POGGERS"]
+jonkler_words = ["jonkler", "Jonkler", "JONKLER"]
+
+
+async def send_based_gif(channel):
+  tenor_gifs = [
+      'https://media.tenor.com/cXMEiCWQJ-EAAAAC/wonder-egg-priority-ai-ohto.gif',
+      'https://media.tenor.com/pZVhtVrNefQAAAAd/spy-x-family-yor-forger.gif',
+  ]
+  random_gif_url = random.choice(tenor_gifs)
+
+  filename = 'based.gif'
+
+  # Download the file
+  def download_file(url, filename):
+    response = requests.get(url, stream=True)
+    with open(filename, 'wb') as f:
+      for chunk in response.iter_content(chunk_size=1024):
+        if chunk:
+          f.write(chunk)
+
+  download_file(random_gif_url, filename)
+
+  # Create discord.File from the downloaded file
+  with open(filename, 'rb') as f:
+    based_gif = discord.File(f)
+    await channel.send(file=based_gif)
+
+
+async def send_pog_gif(channel):
+  tenor_gifs = [
+      'https://media.tenor.com/ivazNwHRNXEAAAAd/pog-poggers.gif',
+      'https://media.tenor.com/_x4YWJaC624AAAAC/x3.gif',
+  ]
+  random_gif_url = random.choice(tenor_gifs)
+
+  filename = 'pog.gif'
+
+  # Download the file
+  def download_file(url, filename):
+    response = requests.get(url, stream=True)
+    with open(filename, 'wb') as f:
+      for chunk in response.iter_content(chunk_size=1024):
+        if chunk:
+          f.write(chunk)
+
+  download_file(random_gif_url, filename)
+
+  # Create discord.File from the downloaded file
+  with open(filename, 'rb') as f:
+    pog_gif = discord.File(f)
+    await channel.send(file=pog_gif)
+
+
+async def send_jonkler_gif(channel):
+  tenor_gifs = [
+      'https://media.tenor.com/ZmfAblJRirMAAAAd/bunny-girl.gif',
+      'https://media.tenor.com/FWCuG9k-2kQAAAAd/uh-hello-department.gif',
+  ]
+  random_gif_url = random.choice(tenor_gifs)
+
+  filename = 'jonkler.gif'
+
+  # Download the file
+  def download_file(url, filename):
+    response = requests.get(url, stream=True)
+    with open(filename, 'wb') as f:
+      for chunk in response.iter_content(chunk_size=1024):
+        if chunk:
+          f.write(chunk)
+
+  download_file(random_gif_url, filename)
+
+  # Create discord.File from the downloaded file
+  with open(filename, 'rb') as f:
+    jonkler_gif = discord.File(f)
+    await channel.send(file=jonkler_gif)
+
 
 @client.event
 async def on_ready():
@@ -47,29 +126,16 @@ async def on_message(message):
       await message.channel.send("Please provide a poll question.")
 
   if message.content.startswith('$based'):
-    tenor_gifs = [
-        'https://media.tenor.com/cXMEiCWQJ-EAAAAC/wonder-egg-priority-ai-ohto.gif',
-        'https://media.tenor.com/pZVhtVrNefQAAAAd/spy-x-family-yor-forger.gif',
-        'https://media.tenor.com/FWCuG9k-2kQAAAAd/uh-hello-department.gif'
-    ]
-    random_gif_url = random.choice(tenor_gifs)
+    await send_based_gif(message.channel)
 
-    filename = 'based.gif'
+  if any(word in message.content for word in based_words):
+    await send_based_gif(message.channel)
 
-    # Download the file
-    def download_file(url, filename):
-      response = requests.get(url, stream=True)
-      with open(filename, 'wb') as f:
-        for chunk in response.iter_content(chunk_size=1024):
-          if chunk:
-            f.write(chunk)
+  if any(word in message.content for word in pog_words):
+    await send_pog_gif(message.channel)
 
-    download_file(random_gif_url, filename)
-
-    # Create discord.File from the downloaded file
-    with open(filename, 'rb') as f:
-      based_gif = discord.File(f)
-      await message.channel.send(file=based_gif)
+  if any(word in message.content for word in jonkler_words):
+    await send_jonkler_gif(message.channel)
 
 
 token = os.getenv('TOKEN')
