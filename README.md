@@ -1,2 +1,2 @@
-#Discord Bot (Based Bot)
+# Discord Bot (Based Bot)
 Made on replit for Cloud Hosting
