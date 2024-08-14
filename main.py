@@ -2,6 +2,7 @@ import os
 
 import discord
 from dotenv import load_dotenv
+import random
 
 load_dotenv()
 
@@ -21,7 +22,12 @@ async def on_message(message):
     return
 
   if message.content.startswith('$based'):
-    await message.channel.send('Based!')
+    tenor_gifs = [
+        'https://tenor.com/view/wonder-egg-priority-ai-ohto-egg-wonder-priority-gif-8174882731399849953',
+    ]
+
+    random_gif = random.choice(tenor_gifs)
+    await message.channel.send(file=discord.File(url=random_gif))
 
 
 token = os.getenv('TOKEN')
