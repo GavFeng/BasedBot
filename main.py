@@ -26,16 +26,20 @@ async def on_message(message):
     poll_parts = message.content.split(' ', 1)
     if len(poll_parts) > 1:
       question = poll_parts[1].strip()
-      options = question.split('\n')
+      poll_question = question.split('\n')[0]
+      options = question.split('\n')[1:]
+      options = [option for option in options if option.strip()]
       if len(options) > 1:
         # Create the poll message
-        poll_message = f"**{question}**\n\n"
+        poll_message = f"**{poll_question}**\n\n"
         for i, option in enumerate(options):
           poll_message += f"{chr(ord('🇦') + i)}: {option}\n"
         # Send the poll message with reactions
         poll = await message.channel.send(poll_message)
         for i in range(len(options)):
           await poll.add_reaction(chr(ord('🇦') + i))
+
+        await message.delete()
       else:
         await message.channel.send(
             "Please provide at least two options for the poll.")
