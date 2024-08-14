@@ -21,9 +21,35 @@ async def on_ready():
 async def on_message(message):
   if message.author == client.user:
     return
+  if message.content.startswith('$poll'):
+    # Extract the poll question and options
+    poll_parts = message.content.split(' ', 1)
+    if len(poll_parts) > 1:
+      question = poll_parts[1].strip()
+      options = question.split('\n')
+      if len(options) > 1:
+        # Create the poll message
+        poll_message = f"**{question}**\n\n"
+        for i, option in enumerate(options):
+          poll_message += f"{chr(ord('🇦') + i)}: {option}\n"
+        # Send the poll message with reactions
+        poll = await message.channel.send(poll_message)
+        for i in range(len(options)):
+          await poll.add_reaction(chr(ord('🇦') + i))
+      else:
+        await message.channel.send(
+            "Please provide at least two options for the poll.")
+    else:
+      await message.channel.send("Please provide a poll question.")
 
   if message.content.startswith('$based'):
-    gif_url = 'https://media.tenor.com/cXMEiCWQJ-EAAAAC/wonder-egg-priority-ai-ohto.gif'
+    tenor_gifs = [
+        'https://media.tenor.com/cXMEiCWQJ-EAAAAC/wonder-egg-priority-ai-ohto.gif',
+        'https://media.tenor.com/pZVhtVrNefQAAAAd/spy-x-family-yor-forger.gif',
+        'https://media.tenor.com/FWCuG9k-2kQAAAAd/uh-hello-department.gif'
+    ]
+    random_gif_url = random.choice(tenor_gifs)
+
     filename = 'based.gif'
 
     # Download the file
@@ -34,7 +60,7 @@ async def on_message(message):
           if chunk:
             f.write(chunk)
 
-    download_file(gif_url, filename)
+    download_file(random_gif_url, filename)
 
     # Create discord.File from the downloaded file
     with open(filename, 'rb') as f:
