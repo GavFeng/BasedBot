@@ -4,8 +4,6 @@ Made on repl.it for Hosting/Database
 # Commands
 $based
 
-On Word Prompts
-
 Poll Function:
  $poll
 
@@ -18,6 +16,8 @@ Anime Function:
  $airing
 $popular
 $upcoming
+
+<On Word Prompts>
 
 ## Credits
 - GIFs are sourced from [Tenor](https://tenor.com).
