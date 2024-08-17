@@ -6,16 +6,16 @@ $based
 
 On Word Prompts
 
-Poll Function
-$poll
+Poll Function:
+ $poll
 
-List Function
-$add
+List Function:
+ $add
 $del
 $list
 
-Anime Function
-$airing
+Anime Function: 
+ $airing
 $popular
 $upcoming
 
