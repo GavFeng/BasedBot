@@ -248,7 +248,7 @@ async def on_message(message):
     formatted_list = "**Popular Anime List:**\n" + "\n".join(
         f"**{i + 1}**. {anime}" for i, anime in enumerate(popular_anime))
     await message.channel.send(formatted_list)
-    
+
   if message.content.startswith('$upcoming'):
     upcoming_anime = get_upcoming_anime()
     formatted_list = "**Upcoming Anime List:**\n" + "\n".join(
@@ -256,7 +256,7 @@ async def on_message(message):
     await message.channel.send(formatted_list)
 
 
-token = os.getenv('TOKEN')
+token = os.environ.get('TOKEN')
 if token is None:
   print(
       "Error: Discord bot token not found. Please set the 'TOKEN' environment variable."
