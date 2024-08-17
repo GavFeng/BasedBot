@@ -1,5 +1,5 @@
 # Discord Bot (Based Bot)
-Made on repl.it for Cloud Hosting
+Made on repl.it
 
 
 ## Credits
