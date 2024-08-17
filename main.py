@@ -245,13 +245,13 @@ async def on_message(message):
 
   if message.content.startswith('$popular'):
     popular_anime = get_popular_anime()
-    formatted_list = "**Airing Anime List:**\n" + "\n".join(
+    formatted_list = "**Popular Anime List:**\n" + "\n".join(
         f"**{i + 1}**. {anime}" for i, anime in enumerate(popular_anime))
     await message.channel.send(formatted_list)
-
+    
   if message.content.startswith('$upcoming'):
     upcoming_anime = get_upcoming_anime()
-    formatted_list = "**Airing Anime List:**\n" + "\n".join(
+    formatted_list = "**Upcoming Anime List:**\n" + "\n".join(
         f"**{i + 1}**. {anime}" for i, anime in enumerate(upcoming_anime))
     await message.channel.send(formatted_list)
 
