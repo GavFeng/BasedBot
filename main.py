@@ -4,6 +4,7 @@ import discord
 from dotenv import load_dotenv
 import random
 import requests
+import json
 from replit import db
 
 load_dotenv()
@@ -17,6 +18,46 @@ pog_words = ["pog", "poggers", "Pog", "Poggers", "POG", "POGGERS"]
 jonkler_words = ["jonkler", "Jonkler", "JONKLER"]
 
 starter_boardgames = ["Chess", "Catan"]
+
+
+def get_airing_anime():
+  response = requests.get("https://api.jikan.moe/v4/top/anime?filter=airing")
+  json_data = response.json()
+  anime_list = json_data.get('data', [])
+
+  if anime_list:
+    # Extract titles from the list of anime
+    titles = [anime['title'] for anime in anime_list]
+    return titles
+  else:
+    return "No airing anime found."
+
+
+def get_popular_anime():
+  response = requests.get(
+      "https://api.jikan.moe/v4/top/anime?filter=bypopularity")
+  json_data = response.json()
+  anime_list = json_data.get('data', [])
+
+  if anime_list:
+    # Extract titles from the list of anime
+    titles = [anime['title'] for anime in anime_list]
+    return titles
+  else:
+    return "Error Finding Anime."
+
+
+def get_upcoming_anime():
+  response = requests.get("https://api.jikan.moe/v4/top/anime?filter=upcoming")
+  json_data = response.json()
+  anime_list = json_data.get('data', [])
+
+  if anime_list:
+    # Extract titles from the list of anime
+    titles = [anime['title'] for anime in anime_list]
+    return titles
+  else:
+    return "No upcoming anime found."
 
 
 async def send_based_gif(channel):
@@ -195,6 +236,24 @@ async def on_message(message):
       await message.channel.send(formatted_list)
     else:
       await message.channel.send("No boardgames found.")
+
+  if message.content.startswith('$airing'):
+    airing_anime = get_airing_anime()
+    formatted_list = "**Airing Anime List:**\n" + "\n".join(
+        f"**{i + 1}**. {anime}" for i, anime in enumerate(airing_anime))
+    await message.channel.send(formatted_list)
+
+  if message.content.startswith('$popular'):
+    popular_anime = get_popular_anime()
+    formatted_list = "**Airing Anime List:**\n" + "\n".join(
+        f"**{i + 1}**. {anime}" for i, anime in enumerate(popular_anime))
+    await message.channel.send(formatted_list)
+
+  if message.content.startswith('$upcoming'):
+    upcoming_anime = get_upcoming_anime()
+    formatted_list = "**Airing Anime List:**\n" + "\n".join(
+        f"**{i + 1}**. {anime}" for i, anime in enumerate(upcoming_anime))
+    await message.channel.send(formatted_list)
 
 
 token = os.getenv('TOKEN')
