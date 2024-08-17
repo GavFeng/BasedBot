@@ -4,6 +4,7 @@ import discord
 from dotenv import load_dotenv
 import random
 import requests
+from replit import db
 
 load_dotenv()
 
@@ -14,6 +15,8 @@ client = discord.Client(intents=intents)
 based_words = ["based", "Based", "BASED"]
 pog_words = ["pog", "poggers", "Pog", "Poggers", "POG", "POGGERS"]
 jonkler_words = ["jonkler", "Jonkler", "JONKLER"]
+
+starter_boardgames = ["Chess", "Catan"]
 
 
 async def send_based_gif(channel):
@@ -91,6 +94,22 @@ async def send_jonkler_gif(channel):
     await channel.send(file=jonkler_gif)
 
 
+def update_boardgame_list(boardgame):
+  if "boardgames" in db.keys():
+    boardgames = db["boardgames"]
+    boardgames.append(boardgame)
+    db["boardgames"] = boardgames
+  else:
+    db["boardgames"] = [boardgame]
+
+
+def delete_boardgame(index):
+  boardgames = db["boardgames"]
+  if len(boardgames) > index:
+    del boardgames[index]
+    db["boardgames"] = boardgames
+
+
 @client.event
 async def on_ready():
   print('We have logged in as {0.user}'.format(client))
@@ -136,6 +155,46 @@ async def on_message(message):
 
   if any(word in message.content for word in jonkler_words):
     await send_jonkler_gif(message.channel)
+
+  options = starter_boardgames
+  if "bordgames" in db.keys():
+    options = options + db["boardgames"]
+
+  if message.content.startswith('$add'):
+    boardgame = message.content.split('$add ', 1)[1]
+    update_boardgame_list(boardgame)
+    await message.channel.send(boardgame + " added.")
+
+  if message.content.startswith('$del'):
+    boardgames = db.get("boardgames", [])
+    if boardgames:
+      try:
+        # Adjust for one-based indexing by subtracting 1
+        index = int(message.content.split('$del', 1)[1].strip()) - 1
+        if 0 <= index < len(boardgames):
+          delete_boardgame(index)
+          boardgames = db["boardgames"]
+          if boardgames:
+            # Format each board game with a number
+            formatted_list = "**Updated Board Game List:**\n" + "\n".join(
+                f"**{i + 1}**. {game}" for i, game in enumerate(boardgames))
+            await message.channel.send(formatted_list)
+          else:
+            await message.channel.send("All boardgames have been deleted.")
+        else:
+          await message.channel.send("Error: Index is out of range.")
+      except ValueError:
+        await message.channel.send(
+            "Error: Please provide a valid integer index after `$del`.")
+
+  if message.content.startswith("$list"):
+    boardgames = db.get("boardgames", [])
+    if boardgames:
+      formatted_list = "**Board Game List:**\n" + "\n".join(
+          f"**{i + 1}**. {game}" for i, game in enumerate(boardgames))
+      await message.channel.send(formatted_list)
+    else:
+      await message.channel.send("No boardgames found.")
 
 
 token = os.getenv('TOKEN')
