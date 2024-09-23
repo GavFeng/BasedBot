@@ -15,7 +15,7 @@ client = discord.Client(intents=intents)
 
 based_words = ["based", "Based", "BASED"]
 pog_words = ["pog", "poggers", "Pog", "Poggers", "POG", "POGGERS"]
-jonkler_words = ["jonkler", "Jonkler", "JONKLER"]
+
 
 starter_boardgames = ["Chess", "Catan"]
 
@@ -193,9 +193,6 @@ async def on_message(message):
 
   if any(word in message.content for word in pog_words):
     await send_pog_gif(message.channel)
-
-  if any(word in message.content for word in jonkler_words):
-    await send_jonkler_gif(message.channel)
 
   options = starter_boardgames
   if "bordgames" in db.keys():
